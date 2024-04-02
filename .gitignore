@@ -1,7 +1,7 @@
 __pycache__/
 project/__pycache__/
-venv/
-music-recommender-system/.idea/
+.venv/
+.idea
 .env
 .env.test
 /.env
