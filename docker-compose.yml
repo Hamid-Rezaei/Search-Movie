@@ -15,17 +15,6 @@ services:
       - searchnet
     entrypoint: "./main-entrypoint.sh"
 
-  elasticsearch:
-    image: elasticsearch:8.12.2
-    container_name: elasticsearch
-    restart: always
-    ports:
-      - "9114:9114"
-    command:
-      - '--es.uri=http://elasticsearch:9200'
-    networks:
-      - searchnet
-
   redis:
     image: redis:alpine
     restart: always
@@ -38,9 +27,51 @@ services:
     networks:
       - searchnet
 
+  elasticsearch:
+    image: elasticsearch:8.12.2
+    container_name: elasticsearch
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - ELASTIC_PASSWORD=elastic
+      - xpack.security.enabled=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    restart: always
+    networks:
+      - searchnet
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: kibana:8.2.2
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_PASSWORD=elastic
+      - "ELASTICSEARCH_URL=http://elasticsearch:9200"
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - searchnet
+
 networks:
   searchnet:
     external: true
 
 volumes:
+  es_data:
+    driver: local
   movie_search_redis_data:
