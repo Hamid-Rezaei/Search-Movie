@@ -3,23 +3,23 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.views import APIView
 
-from main.api.serializer.search_music_serializer import SearchMusicSerializer, SearchMusicResponseSerializer, \
+from main.api.serializer.search_movie_serializer import SearchMovieSerializer, SearchMovieResponseSerializer, \
     CommonErrorResponseSerializer
-from main.logic.search_music_logic import SearchMusicLogic
+from main.logic.search_movie_logic import SearchMovieLogic
 
 
-class SearchMusicController(APIView):
+class SearchMovieController(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.search_music_logic = SearchMusicLogic()
+        self.search_movie_logic = SearchMovieLogic()
 
     @extend_schema(
-        tags=["search_music",],
-        request=SearchMusicSerializer,
-        summary="Search music by audio",
-        operation_id="search_music",
+        tags=["search_movie",],
+        request=SearchMovieSerializer,
+        summary="Search movie",
+        operation_id="search_movie",
         responses={
-            200: SearchMusicResponseSerializer,
+            200: SearchMovieResponseSerializer,
             400: CommonErrorResponseSerializer,
             500: CommonErrorResponseSerializer
         }
@@ -27,18 +27,16 @@ class SearchMusicController(APIView):
     def post(self, request):
         try:
             body: dict = request.data
-            validation = SearchMusicSerializer(data=body)
+            validation = SearchMovieSerializer(data=body)
 
             if not validation.is_valid():
                 return JsonResponse({"details": 'Bad Request Body.'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                self.search_music_logic.search_music(
-                    email=validation.validated_data.get("email"),
-                    audio=validation.validated_data.get("audio")
-                )
+                self.search_movie_logic.search_movie(email=validation.validated_data.get("email"),
+                                                     audio=validation.validated_data.get("audio"))
 
                 response = {'msg': 'success'}
-                serialized_response = SearchMusicResponseSerializer(response)
+                serialized_response = SearchMovieResponseSerializer(response)
                 return JsonResponse(serialized_response.data, status=status.HTTP_200_OK)
 
         except Exception as error:
