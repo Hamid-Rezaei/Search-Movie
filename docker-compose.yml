@@ -1,31 +1,32 @@
 version: '3.7'
 
+
 services:
   api:
-    image: main_service
-    container_name: main_service
-    restart: always
+    image: search_movie
+    container_name: search_movie
+    environment:
+      - REDIS_HOST=searchnet
     volumes:
       - ./:/code
+    networks:
+      - searchnet
     expose:
       - 8000
     ports:
       - "8000:8000"
-    networks:
-      - searchnet
     entrypoint: "./main-entrypoint.sh"
 
   redis:
     image: redis:alpine
-    restart: always
-    command: redis-server
+    container_name: redis
     volumes:
       - movie_search_redis_data:/data
     ports:
       - "6379:6379"
-    container_name: redis
     networks:
       - searchnet
+    command: redis-server
 
   elasticsearch:
     image: elasticsearch:8.12.2
@@ -46,7 +47,6 @@ services:
         hard: 65536
     volumes:
       - es_data:/usr/share/elasticsearch/data
-    restart: always
     networks:
       - searchnet
     ports:
