@@ -28,15 +28,14 @@ services:
       - searchnet
 
   elasticsearch:
-    image: elasticsearch:7.17.6
+    image: elasticsearch:8.12.2
     container_name: elasticsearch
     environment:
       - node.name=es01
       - cluster.name=es-docker-cluster
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - ELASTIC_PASSWORD=elastic
-      - xpack.security.enabled=true
+      - xpack.security.enabled=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
       memlock:
@@ -54,11 +53,9 @@ services:
       - "9200:9200"
 
   kibana:
-    image: kibana:7.16.2
+    image: kibana:8.2.2
     container_name: kibana
     environment:
-      - ELASTICSEARCH_USERNAME=elastic
-      - ELASTICSEARCH_PASSWORD=elastic
       - "ELASTICSEARCH_URL=http://elasticsearch:9200"
     ports:
       - "5601:5601"

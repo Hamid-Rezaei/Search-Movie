@@ -1,3 +1,6 @@
+from typing import List
+
+
 class ConfigConstants:
     RUN_ENV_TYPE_DEVELOPMENT = "development"
     RUN_ENV_TYPE_STAGE = "stage"
@@ -123,7 +126,19 @@ class UtilsConfig:
     UTILS_PRICE_NOTICE_DB_READ_LIVENESS_IN_SECONDS = 5 * 60  # 5 Minutes
 
 
+class ElasticSearchBaseConfig:
+    ELASTIC_SEARCH_HOSTS: List[str] = []
+    ELASTIC_SEARCH_API_KEY: str = None
+    ELASTIC_SEARCH_KWARG: dict = {}
+    ELASTIC_SEARCH_HTTP_AUTH_PASSWORD: str = None
+    ELASTIC_SEARCH_HTTP_AUTH_USER_NAME: str = None
+    ELASTIC_SEARCH_HTTPS_VERIFY_CERTS: bool = None
+    ELASTIC_SEARCH_BATCH_INTERVAL_THRESHOLD_IN_SECONDS: int = None
+    ELASTIC_SEARCH_BATCH_DOC_COUNT_THRESHOLD: int = None
+
+
 class CommonsBaseConfig(
+    ElasticSearchBaseConfig,
     WebFrameworkConfig,
     DatabaseBaseConfig,
     EnvironmentConfig,

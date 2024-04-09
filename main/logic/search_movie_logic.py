@@ -3,44 +3,25 @@ import requests
 from main.dal.elsdao.search_movie_elsdao import SearchMovieESDao
 from main.dal.rddao.search_movie_rddao import SearchMovieRDDao
 from main.utils.singleton import Singleton
+from project.configuration.config import Config
+from project.configuration.configuration import Configuration
 
 
 class SearchMovieLogic(metaclass=Singleton):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.search_movie_rddao = SearchMovieRDDao()
-        self.search_movie_esdao = SearchMovieESDao('movie')
+        self.search_movie_esdao = SearchMovieESDao(Config.ELASTIC_SEARCH_INDEX_NAME)
 
-    def _search_movie_in_elasticsearch(self, query):
-        ...
-        # search_body = {
-        #     "query": {
-        #         "parent_id": {
-        #             "type": "comment",
-        #             "id": post_id
-        #         }
-        #     },
-        #     "sort": [
-        #         {
-        #             "comment.created_at": {
-        #                 "order": "desc"
-        #             }
-        #         }
-        #     ]
-        # }
-        # res = []
-        # response = self.feed_base_es_dao.search_documents(body=search_body)
-        # for hit in response:
-        #     data = hit['_source'].get('comment')
-        #     comment_id = hit.get('_id')
-        #     data['id'] = comment_id
-        #     user = SocialUtils.get_user_object(user_id=data.get('author_id'))
-        #     data['nickname'] = user.userprofileinfo.nickname
-        #     avatar = user.userprofileinfo.avatar
-        #     data['avatar_url'] = avatar.url if avatar else None
-        #     res.append(data)
-        # return res
-        #
+    def _search_movie_in_elasticsearch(self, title):
+        query = {
+            "match": {
+                "Series_Title": f"{title}"
+            }
+        }
+
+        return self.search_movie_esdao.search_documents(query=query)
+
 
     def _search_movie_in_rapid_api(self, query):
 
@@ -76,3 +57,9 @@ class SearchMovieLogic(metaclass=Singleton):
         movie_info = None
 
         return movie_info
+
+
+if __name__ == '__main__':
+    Configuration.configure(Config)
+    s = SearchMovieLogic()
+    print(s._search_movie_in_elasticsearch('Game of Thrones'))

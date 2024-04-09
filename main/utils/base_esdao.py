@@ -61,5 +61,11 @@ class BaseESDao(ABCBaseESDao):
         hosts = Configuration.config().ELASTIC_SEARCH_HOSTS
         https_verify_certs = Configuration.config().ELASTIC_SEARCH_HTTPS_VERIFY_CERTS
 
-        return self._orgnize_kwargs(kwargs, api_key, hosts, http_auth_password, http_auth_user_name,
-                                    https_verify_certs)
+        return self._orgnize_kwargs(
+            kwargs,
+            api_key,
+            hosts,
+            http_auth_password,
+            http_auth_user_name,
+            https_verify_certs
+        )

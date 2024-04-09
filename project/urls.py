@@ -13,7 +13,7 @@ open_api_urlpatterns = [
 ]
 
 public_urlpatterns = [
-    # path('api/v1/', include('main.urls')),
+    path('api/v1/', include('main.urls')),
     path('admin/', admin.site.urls),
 ]
 
