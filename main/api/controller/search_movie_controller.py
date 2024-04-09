@@ -32,8 +32,7 @@ class SearchMovieController(APIView):
             if not validation.is_valid():
                 return JsonResponse({"details": 'Bad Request Body.'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                self.search_movie_logic.search_movie(email=validation.validated_data.get("email"),
-                                                     audio=validation.validated_data.get("audio"))
+                self.search_movie_logic.search_movie(query=validation.validated_data.get("q"))
 
                 response = {'msg': 'success'}
                 serialized_response = SearchMovieResponseSerializer(response)

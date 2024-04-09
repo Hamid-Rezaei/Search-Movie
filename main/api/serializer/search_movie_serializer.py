@@ -12,8 +12,7 @@ class CommonErrorResponseSerializer(serializers.Serializer):
 
 
 class SearchMovieSerializer(serializers.Serializer):
-    email = serializers.EmailField(required=True)
-    audio = serializers.FileField(required=True)
+    q = serializers.CharField(required=True)
 
     def update(self, instance, validated_data):
         pass
