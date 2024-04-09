@@ -7,7 +7,7 @@ class SearchMovieRDDao(CommonsBaseRDDao, metaclass=Singleton):
 
     def cache_search_result(self, title: str, value: str):
         key = self.MOVIE_KEY.key.format(title=title)
-        self.client.sadd(key, *value)
+        self.client.sadd(key, value)
 
     def get_cached_search_result(self, title: str):
         key = self.MOVIE_KEY.key.format(title=title)

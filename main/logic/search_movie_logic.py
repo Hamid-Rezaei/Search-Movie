@@ -32,31 +32,33 @@ class SearchMovieLogic(metaclass=Singleton):
 
         response = requests.get(url, params=title, headers=headers)
 
-        return response.json()['#IMDB_URL']
+        return response.json()
 
     def search_movie(self, query):
-        result = self.search_movie_rddao.get_cached_search_result()
+        result = self.search_movie_rddao.get_cached_search_result(title=query)
 
         if not result:
-            result = self._search_movie_in_elasticsearch()
+            result = self._search_movie_in_elasticsearch(title=query)
             if result:
-                self.search_movie_rddao.cache_search_result()
+                self.search_movie_rddao.cache_search_result(title=query, value=result)
             else:
                 # call api
                 result = self._search_movie_in_rapid_api(query)
                 if result:
-                    self.search_movie_rddao.cache_search_result()
+                    self.search_movie_rddao.cache_search_result(title=query, value=result)
                 else:
                     raise Exception('Movie not found')
 
-        result = self.search_movie_rddao.get_cached_search_result()
-        movie_info = None
+        movie_url = self.search_movie_rddao.get_cached_search_result(title=query)
 
-        return movie_info
+        return movie_url
 
 
 if __name__ == '__main__':
     Configuration.configure(Config)
     s = SearchMovieLogic()
-    print(s._search_movie_in_elasticsearch('Game of Thrones'))
+    # print(s._search_movie_in_elasticsearch('Game of Thrones'))
     # print(s._search_movie_in_rapid_api('Game of Thrones'))
+    s.search_movie_rddao.cache_search_result('Game of Thrones', s._search_movie_in_elasticsearch('Game of Thrones'))
+    print(s.search_movie_rddao.get_cached_search_result(title='Game of Thrones'))
+
