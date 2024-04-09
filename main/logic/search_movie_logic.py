@@ -20,23 +20,19 @@ class SearchMovieLogic(metaclass=Singleton):
             }
         }
 
-        return self.search_movie_esdao.search_documents(query=query)
+        return self.search_movie_esdao.search_documents(query=query)[0]['_source'].get('Poster_Link')
 
-
-    def _search_movie_in_rapid_api(self, query):
-
-
-        url = "https://imdb-movies-web-series-etc-search.p.rapidapi.com/thegodfather.json"
+    def _search_movie_in_rapid_api(self, title):
+        url = "https://imdb-search2.p.rapidapi.com/the%20game"
 
         headers = {
             "X-RapidAPI-Key": "a936da7104msh4f5d3eb7358a19cp14b04bjsnb3f9dd254e78",
-            "X-RapidAPI-Host": "imdb-movies-web-series-etc-search.p.rapidapi.com"
+            "X-RapidAPI-Host": "imdb-search2.p.rapidapi.com"
         }
 
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, params=title, headers=headers)
 
-        print(response.json())
-        return response.json()
+        return response.json()['#IMDB_URL']
 
     def search_movie(self, query):
         result = self.search_movie_rddao.get_cached_search_result()
@@ -63,3 +59,4 @@ if __name__ == '__main__':
     Configuration.configure(Config)
     s = SearchMovieLogic()
     print(s._search_movie_in_elasticsearch('Game of Thrones'))
+    # print(s._search_movie_in_rapid_api('Game of Thrones'))
