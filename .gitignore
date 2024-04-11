@@ -5,3 +5,10 @@ project/__pycache__/
 .env
 .env.test
 /.env
+phase0/home
+phase0/blobs
+phase0/index.json
+phase0/manifest.json
+phase0/oci-layout
+phase0/repositories
+phase0/tmp.tar
