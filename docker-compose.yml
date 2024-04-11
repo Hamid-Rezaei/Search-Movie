@@ -3,14 +3,14 @@ version: '3.7'
 
 services:
   api:
-    image: search_movie
+    build: .
     container_name: search_movie
     environment:
-      - REDIS_HOST=searchnet
+      - REDIS_HOST=dockernet
     volumes:
       - ./:/code
     networks:
-      - searchnet
+      - dockernet
     expose:
       - 8000
     ports:
@@ -25,7 +25,7 @@ services:
     ports:
       - "6379:6379"
     networks:
-      - searchnet
+      - dockernet
     command: redis-server
 
   elasticsearch:
@@ -48,7 +48,7 @@ services:
     volumes:
       - es_data:/usr/share/elasticsearch/data
     networks:
-      - searchnet
+      - dockernet
     ports:
       - "9200:9200"
 
@@ -62,10 +62,10 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      - searchnet
+      - dockernet
 
 networks:
-  searchnet:
+  dockernet:
     external: true
 
 volumes:
