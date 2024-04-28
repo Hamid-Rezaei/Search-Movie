@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elastic-deployment
+  labels:
+    app: elastic
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: elastic-deployment
+  template:
+    metadata:
+      name: elastic-deployment
+      labels:
+        app: elastic-deployment
+    spec:
+      containers:
+        - name: elastic-deployment
+          image: nginx
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              protocol: TCP
+      restartPolicy: Always
+      
