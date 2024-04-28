@@ -1,20 +1,23 @@
 version: '3.7'
 
-
 services:
-  api:
+  api_server:
     build: .
     container_name: search_movie
     environment:
-      - REDIS_HOST=dockernet
+      - "ELASTIC_SEARCH_HOSTS=['http://elasticsearch:9200']"
+      - "ELASTIC_SEARCH_INDEX_NAME=movies"
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     volumes:
-      - ./:/code
+      - .:/code
     networks:
       - dockernet
-    expose:
-      - 8000
     ports:
       - "8000:8000"
+    depends_on:
+      - redis
+      - elasticsearch
     entrypoint: "./main-entrypoint.sh"
 
   redis:

@@ -1,10 +1,10 @@
 class Config:
-    # Postgres Configs
-    DB_NAME: str
-    DB_USER: str
-    DB_PASSWORD: str
-    DB_HOST: str
-    DB_PORT: int = 5432
+    # # Postgres Configs
+    # DB_NAME: str
+    # DB_USER: str
+    # DB_PASSWORD: str
+    # DB_HOST: str
+    # DB_PORT: int = 5432
 
     # Redis Config
     REDIS_HOST: str = None
