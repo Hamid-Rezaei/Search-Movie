@@ -61,7 +61,8 @@ spec:
     spec:
       containers:
         - name: api-server
-          image: search-movie-api
+          image: localhost:5000/search-movie-api:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
           envFrom:

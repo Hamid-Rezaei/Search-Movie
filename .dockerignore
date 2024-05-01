@@ -2,3 +2,6 @@ phase0
 movies.json
 Dockerfile
 CC_HW2_Docker.pdf
+.venv
+.idea
+.env
