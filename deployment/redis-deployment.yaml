@@ -25,9 +25,25 @@ spec:
               memory: 100Mi
           ports:
             - containerPort: 6379
-
+          volumeMounts:
+            - name: redis-persistent-storage
+              mountPath: /data/redis
+      volumes:
+        - name: redis-persistent-storage
+          persistentVolumeClaim:
+            claimName: redis-pv-claim
 ---
-
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: v1
 kind: Service
 metadata:
